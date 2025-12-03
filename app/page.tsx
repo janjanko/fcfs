@@ -1,18 +1,40 @@
 "use client";
 
 import React, { useState, useMemo, useCallback } from 'react';
-import {
-  Palette,
-  Clock,
-  Zap,
-  ChevronsRight,
-  Calculator,
-  GanttChart,
-  ListPlus,
-  Trash2,
-  Play,
-  LucideIcon,
-} from 'lucide-react';
+// REMOVED 'lucide-react' import, replacing with inline SVGs/Types below.
+
+// --- Icon Type/Replacements ---
+// Define a simple type for the replacement icon component
+type IconComponent = React.FC<{ className?: string, title?: string, color?: string }>;
+
+// Replaced Lucide icons with simple inline SVG versions where necessary
+const IconPalette: IconComponent = (props) => (
+  <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 1 0 0 7h5a3.5 3.5 0 1 1 0 7H6"></path></svg>
+);
+const IconClock: IconComponent = (props) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+);
+const IconZap: IconComponent = (props) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+);
+const IconChevronsRight: IconComponent = (props) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
+);
+const IconCalculator: IconComponent = (props) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="8" y1="10" x2="16" y2="10"></line><line x1="8" y1="14" x2="16" y2="14"></line><line x1="8" y1="18" x2="16" y2="18"></line></svg>
+);
+const IconGanttChart: IconComponent = (props) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20M5 10h14M5 14h14M16 4h4a2 2 0 0 1 2 2v1h-8V4h-2V6H4a2 2 0 0 1-2-2V3a1 1 0 0 1 1-1h13v2z"></path></svg>
+);
+const IconListPlus: IconComponent = (props) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 12H3M16 6H3M16 18H3M17 14v6M20 17h-6"></path></svg>
+);
+const IconTrash2: IconComponent = (props) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+);
+const IconPlay: IconComponent = (props) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+);
 
 // --- Theme Definitions and Types ---
 const themeColors = {
@@ -92,7 +114,7 @@ const useThemeStyles = (currentTheme: ThemeKey) => {
 const ThemeSelector: React.FC<{ currentTheme: ThemeKey, setTheme: (theme: ThemeKey) => void }> = ({ currentTheme, setTheme }) => (
   <div className="fixed top-4 right-4 z-50">
     <div className="flex items-center space-x-2 bg-gray-800 p-2 rounded-full shadow-2xl border border-gray-700">
-      <Palette className="w-5 h-5 text-gray-400" />
+      <IconPalette className="w-5 h-5 text-gray-400" />
       {Object.entries(themeColors).map(([key, theme]) => (
         <button
           key={key}
@@ -108,7 +130,7 @@ const ThemeSelector: React.FC<{ currentTheme: ThemeKey, setTheme: (theme: ThemeK
   </div>
 );
 
-const SectionHeader: React.FC<{ icon: LucideIcon, title: string, theme: string }> = ({ icon: Icon, title, theme }) => {
+const SectionHeader: React.FC<{ icon: IconComponent, title: string, theme: string }> = ({ icon: Icon, title, theme }) => {
   const iconColor = `text-${theme}-600`;
   const borderColor = `border-${theme}-600/50`;
   return (
@@ -235,7 +257,7 @@ const FCFSScheduler: React.FC = () => {
 
   const renderProcessInput = () => (
     <div className="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700">
-      <SectionHeader icon={ListPlus} title="Add New Process" theme={themeAccent} />
+      <SectionHeader icon={IconListPlus} title="Add New Process" theme={themeAccent} />
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 items-end mb-4">
         {/* Process Name */}
         <InputField
@@ -271,7 +293,7 @@ const FCFSScheduler: React.FC = () => {
           onClick={addProcess}
           className={`flex items-center justify-center p-3 text-white font-bold rounded-lg transition transform hover:scale-[1.02] ${themeClasses.button}`}
         >
-          <ListPlus className="w-5 h-5 mr-2" />
+          <IconListPlus className="w-5 h-5 mr-2" />
           Add Process
         </button>
       </div>
@@ -337,7 +359,7 @@ const FCFSScheduler: React.FC = () => {
 
     return (
       <div className="bg-gray-800 p-6 rounded-xl shadow-lg mt-8 border border-gray-700">
-        <SectionHeader icon={GanttChart} title="Gantt Chart (FCFS)" theme={themeAccent} />
+        <SectionHeader icon={IconGanttChart} title="Gantt Chart (FCFS)" theme={themeAccent} />
         <div className="relative pt-4 pb-8">
           <div className="flex w-full space-x-1.5 border-t-2 border-b-2 border-gray-700 py-1">
             {chartBars}
@@ -371,14 +393,14 @@ const FCFSScheduler: React.FC = () => {
           <div className="mt-8">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-bold text-white flex items-center">
-                    <ChevronsRight className={`w-5 h-5 mr-2 ${themeClasses.icon}`} />
+                    <IconChevronsRight className={`w-5 h-5 mr-2 ${themeClasses.icon}`} />
                     Processes ({processes.length})
                 </h2>
                 <button
                     onClick={clearProcesses}
                     className="flex items-center text-sm px-3 py-1 bg-rose-700 hover:bg-rose-800 rounded-lg transition"
                 >
-                    <Trash2 className="w-4 h-4 mr-1" /> Clear All
+                    <IconTrash2 className="w-4 h-4 mr-1" /> Clear All
                 </button>
             </div>
             
@@ -388,14 +410,14 @@ const FCFSScheduler: React.FC = () => {
             {/* Results */}
             <div className="mt-6 flex justify-end space-x-6">
                 <ResultBox 
-                    icon={Calculator} 
+                    icon={IconCalculator} 
                     title="Avg Turnaround Time" 
                     value={averages.avgTAT.toFixed(2)} 
                     unit="units" 
                     theme={themeAccent} 
                 />
                 <ResultBox 
-                    icon={Calculator} 
+                    icon={IconCalculator} 
                     title="Avg Waiting Time" 
                     value={averages.avgWT.toFixed(2)} 
                     unit="units" 
@@ -410,7 +432,7 @@ const FCFSScheduler: React.FC = () => {
 
         {/* Legend/Formulas */}
         <div className="mt-12">
-            <SectionHeader icon={Play} title="Formulas & Legend" theme={themeAccent} />
+            <SectionHeader icon={IconPlay} title="Formulas & Legend" theme={themeAccent} />
             <div className="grid md:grid-cols-2 gap-8">
                 <div className="bg-gray-800 p-6 rounded-xl border border-gray-700 space-y-3">
                     <p className="text-sm text-gray-300">
@@ -473,8 +495,6 @@ const InputField: React.FC<{
   );
 };
 
-// REMOVED THE INCORRECTLY STRUCTURED ProcessTable component
-
 const ProcessTableFixed: React.FC<{ processes: Process[], theme: string, onDelete: (id: number) => void }> = ({ processes, theme, onDelete }) => {
   const headerBgMap: Record<string, string> = {
     orange: 'bg-orange-700',
@@ -484,7 +504,7 @@ const ProcessTableFixed: React.FC<{ processes: Process[], theme: string, onDelet
   };
   const headerBg = headerBgMap[theme] || headerBgMap.orange;
 
-  // FIXED: Added className prop to the Th component definition
+  // FIXED: Adjusted Th component type signature to accept custom icon components
   const Th: React.FC<{ children: React.ReactNode, className?: string }> = ({ children, className = '' }) => (
     <th className={`px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider ${headerBg} ${className}`}>
       {children}
@@ -500,12 +520,12 @@ const ProcessTableFixed: React.FC<{ processes: Process[], theme: string, onDelet
         <thead>
           <tr>
             <Th>Process</Th>
-            <Th><Clock className="inline w-4 h-4 mr-1 mb-0.5" /> AT</Th>
-            <Th><Zap className="inline w-4 h-4 mr-1 mb-0.5" /> BT</Th>
-            <Th><ChevronsRight className="inline w-4 h-4 mr-1 mb-0.5" /> ST</Th>
-            <Th><Play className="inline w-4 h-4 mr-1 mb-0.5" /> CT</Th>
-            <Th className={tatColor}><Calculator className="inline w-4 h-4 mr-1 mb-0.5" /> TAT</Th>
-            <Th className={wtColor}><Calculator className="inline w-4 h-4 mr-1 mb-0.5" /> WT</Th>
+            <Th><IconClock className="inline w-4 h-4 mr-1 mb-0.5" /> AT</Th>
+            <Th><IconZap className="inline w-4 h-4 mr-1 mb-0.5" /> BT</Th>
+            <Th><IconChevronsRight className="inline w-4 h-4 mr-1 mb-0.5" /> ST</Th>
+            <Th><IconPlay className="inline w-4 h-4 mr-1 mb-0.5" /> CT</Th>
+            <Th className={tatColor}><IconCalculator className="inline w-4 h-4 mr-1 mb-0.5" /> TAT</Th>
+            <Th className={wtColor}><IconCalculator className="inline w-4 h-4 mr-1 mb-0.5" /> WT</Th>
             <Th>Actions</Th>
           </tr>
         </thead>
@@ -525,7 +545,7 @@ const ProcessTableFixed: React.FC<{ processes: Process[], theme: string, onDelet
                   className="text-gray-400 hover:text-rose-500 transition"
                   title="Remove Process"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <IconTrash2 className="w-4 h-4" />
                 </button>
               </td>
             </tr>
@@ -537,7 +557,7 @@ const ProcessTableFixed: React.FC<{ processes: Process[], theme: string, onDelet
 };
 
 // Helper for displaying results
-const ResultBox: React.FC<{ icon: LucideIcon, title: string, value: string, unit: string, theme: string }> = ({ icon: Icon, title, value, unit, theme }) => {
+const ResultBox: React.FC<{ icon: IconComponent, title: string, value: string, unit: string, theme: string }> = ({ icon: Icon, title, value, unit, theme }) => {
     const iconColor = `text-${theme}-400`;
     const borderColor = `border-${theme}-600`;
     return (
